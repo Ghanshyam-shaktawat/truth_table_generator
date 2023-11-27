@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Truth Table Generator</title>
+  </head>
+  <body>
+    <h1>Truth Table Generator</h1>
+    <form action="/" method="post">
+      {% csrf_token %}
+      <input type="text" name="query" placeholder="Enter Your Query: " />
+      <button type="submit" name="submit">Create Truth Table</button>
+    </form>
+    {% if query %}
+    <h2>{{ query }}</h2>
+    {% endif %} {% if truth_table_data %}
+    <table border="1">
+      <thead>
+        <tr>
+          {% for header in truth_table_data.headers %}
+          <th>{{ header }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in truth_table_data.rows %}
+        <tr>
+          {% for value in row %}
+          <td>{{ value }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </body>
+</html>
