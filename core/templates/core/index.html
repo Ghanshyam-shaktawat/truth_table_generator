@@ -4,18 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Truth Table Generator</title>
+    <link rel="stylesheet" href="static/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue&family=IBM+Plex+Sans:ital,wght@0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <h1>Truth Table Generator</h1>
+
     <form action="/" method="post">
       {% csrf_token %}
-      <input type="text" name="query" placeholder="Enter Your Query: " />
+      <input
+        type="text"
+        name="query"
+        id="queryInput"
+        placeholder="Enter Your Query: "
+      />
       <button type="submit" name="submit">Create Truth Table</button>
     </form>
+    <button type="button" class="proposition-btn">∧</button>
+    <button type="button" class="proposition-btn">∨</button>
+    <button type="button" class="proposition-btn">→</button>
+    <button type="button" class="proposition-btn">¬</button>
+    <button type="button" class="proposition-btn">⇔</button>
+
     {% if query %}
     <h2>{{ query }}</h2>
     {% endif %} {% if truth_table_data %}
-    <table border="1">
+    <table border="1" id="truthTable">
       <thead>
         <tr>
           {% for header in truth_table_data.headers %}
@@ -34,5 +53,6 @@
       </tbody>
     </table>
     {% endif %}
+    <script src="static/script.js"></script>
   </body>
 </html>

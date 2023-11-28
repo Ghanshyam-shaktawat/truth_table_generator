@@ -1,0 +1,130 @@
+
+body,
+h1,
+form {
+    font-family: 'Comic Neue', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Comic Neue', cursive;
+    background-color: #FEF6EA;
+    padding: 20px;
+}
+
+h1 {
+    font-weight: bold;
+    font-family: 'Comic Neue', cursive;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: #FEF6EA;
+}
+
+input[type="text"],
+button {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    padding: 8px;
+    font-size: 16px;
+}
+
+input[type="text"] {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    width: 300px;
+    border-radius: 20px;
+    background-color: #FEF3E2;
+    border: 2px solid black;
+}
+
+button {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    margin: 4px;
+    cursor: pointer;
+    background-color: #FEEED2;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    font-size: 16px;
+    box-shadow: 2px 2px 0 0 white, 4px 4px 0 0 black;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    box-shadow: 3px 3px white, 6px 6px 0 0 black;
+    transform: translate(-2px, -2px);
+}
+
+.proposition-btn {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    position: relative;
+    left: 555px;
+    margin: 6px;
+    background-color: #FEEED2;
+    color: black;
+    cursor: pointer;
+    border: 2px solid black;
+    box-shadow: 2px 2px 0 0 white, 4px 4px 0 0 black;
+    transition-duration: 200ms;
+
+}
+
+.proposition-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 3px 3px white, 6px 6px 0 0 black;
+    transform: translate(-2px, -2px);
+}
+
+
+table {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeInTable 1.5s forwards;
+
+}
+
+
+table th {
+    font-family: 'Comic Neue', cursive;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+
+table td {
+    font-family: 'Comic Neue', cursive;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+
+}
+
+
+@keyframes fadeInTable {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
