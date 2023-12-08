@@ -1,7 +1,7 @@
 from django.shortcuts import render
+from django.http import Http404
 
-
-def isWellFormed(P):
+def is_well_formed(P):
     bracketLevel = 0
     for c in P:
         if c == "(":
@@ -13,33 +13,33 @@ def isWellFormed(P):
     return bracketLevel == 0
 
 
-def parseNegation(P, truthValues):
-    return not parseProposition(P, truthValues)
+def parse_negation(P, truthValues):
+    return not parse_proposition(P, truthValues)
 
 
-def parseConjunction(P, Q, truthValues):
-    return parseProposition(P, truthValues) and parseProposition(Q, truthValues)
+def parse_conjunction(P, Q, truthValues):
+    return parse_proposition(P, truthValues) and parse_proposition(Q, truthValues)
 
 
-def parseDisjunction(P, Q, truthValues):
-    return parseProposition(P, truthValues) or parseProposition(Q, truthValues)
+def parse_disjunction(P, Q, truthValues):
+    return parse_proposition(P, truthValues) or parse_proposition(Q, truthValues)
 
 
-def parseConditional(P, Q, truthValues):
-    return (not parseProposition(P, truthValues)) or parseProposition(Q, truthValues)
+def parse_conditional(P, Q, truthValues):
+    return (not parse_proposition(P, truthValues)) or parse_proposition(Q, truthValues)
 
 
-def parseBiconditional(P, Q, truthValues):
-    return parseProposition(P, truthValues) == parseProposition(Q, truthValues)
+def parse_biconditional(P, Q, truthValues):
+    return parse_proposition(P, truthValues) == parse_proposition(Q, truthValues)
 
 
-def parseProposition(P, truthValues):
+def parse_proposition(P, truthValues):
     P = P.replace(" ", "")
 
-    if not isWellFormed(P):
+    if not is_well_formed(P):
         return "Error"
 
-    while P[0] == "(" and P[-1] == ")" and isWellFormed(P[1:len(P) - 1]):
+    while P[0] == "(" and P[-1] == ")" and is_well_formed(P[1:len(P) - 1]):
         P = P[1:len(P) - 1]
 
     if len(P) == 1:
@@ -52,9 +52,9 @@ def parseProposition(P, truthValues):
         if P[i] == ")":
             bracketLevel -= 1
         if P[i] == "→" and bracketLevel == 0:
-            return parseConditional(P[0:i], P[i + 1:], truthValues)
+            return parse_conditional(P[0:i], P[i + 1:], truthValues)
         if P[i] == "↔" and bracketLevel == 0:
-            return parseBiconditional(P[0:i], P[i + 1:], truthValues)
+            return parse_biconditional(P[0:i], P[i + 1:], truthValues)
 
     bracketLevel = 0
     for i in reversed(range(len(P))):
@@ -63,7 +63,7 @@ def parseProposition(P, truthValues):
         if P[i] == ")":
             bracketLevel -= 1
         if P[i] == "∨" and bracketLevel == 0:
-            return parseDisjunction(P[0:i], P[i + 1:], truthValues)
+            return parse_disjunction(P[0:i], P[i + 1:], truthValues)
 
     bracketLevel = 0
     for i in reversed(range(len(P))):
@@ -72,7 +72,7 @@ def parseProposition(P, truthValues):
         if P[i] == ")":
             bracketLevel -= 1
         if P[i] == "∧" and bracketLevel == 0:
-            return parseConjunction(P[0:i], P[i + 1:], truthValues)
+            return parse_conjunction(P[0:i], P[i + 1:], truthValues)
 
     bracketLevel = 0
     for i in reversed(range(len(P))):
@@ -81,43 +81,50 @@ def parseProposition(P, truthValues):
         if P[i] == ")":
             bracketLevel -= 1
         if P[i] == "¬" and bracketLevel == 0:
-            return parseNegation(P[i + 1:], truthValues)
+            return parse_negation(P[i + 1:], truthValues)
 
 def index(request):
     query = None
     truth_table_data = None
 
     if request.method == 'POST':
-        query = request.POST.get('query')
-        truthValues = {}
-        for i in range(len(query)):
-            if query[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                truthValues[query[i]] = True
+        try:
+            query = request.POST.get('query')
+            truthValues = {}
+            for i in range(len(query)):
+                if query[i] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                    truthValues[query[i]] = True
 
-        headers = list(truthValues.keys())
-        headers.append(query)
+            headers = list(truthValues.keys())
+            headers.append(query)
 
-        rows = []
-        row_values = list(truthValues.values())
-        row_values.append("T" if parseProposition(
-            query, truthValues) else "F")
-        rows.append(row_values)
+            rows = []
+            row_values = list(truthValues.values())
+            row_values.append("T" if parse_proposition(
+                query, truthValues) else "F")
+            rows.append(row_values)
 
-        j = len(truthValues.values()) - 1
-        while True in truthValues.values():
-            variable = list(truthValues.keys())[j]
-            truthValues[variable] = not truthValues[variable]
+            j = len(truthValues.values()) - 1
+            while True in truthValues.values():
+                variable = list(truthValues.keys())[j]
+                truthValues[variable] = not truthValues[variable]
 
-            if not truthValues[variable]:
-                row_values = list(truthValues.values())
-                row_values.append("T" if parseProposition(
-                    query, truthValues) else "F")
-                rows.append(row_values)
-                j = len(truthValues.values()) - 1
-            else:
-                j -= 1
+                if not truthValues[variable]:
+                    row_values = list(truthValues.values())
+                    row_values.append("T" if parse_proposition(
+                        query, truthValues) else "F")
+                    rows.append(row_values)
+                    j = len(truthValues.values()) - 1
+                else:
+                    j -= 1
 
-        truth_table_data = {'headers': headers, 'rows': rows}
+            truth_table_data = {'headers': headers, 'rows': rows}
+
+        except IndexError:
+            raise Http404("Error Query!")
+            
+        except KeyError:
+            raise Http404("Query should be in proper format!")
 
     context = {'query': query, 'truth_table_data': truth_table_data}
     return render(request, 'core/index.html', context)

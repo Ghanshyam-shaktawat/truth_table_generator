@@ -13,46 +13,62 @@
     />
   </head>
   <body>
-    <h1>Truth Table Generator</h1>
+    <main>
+      <h1>Truth Table Generator</h1>
+      <form action="/" method="post">
+        {% csrf_token %}
+        <input
+          type="text"
+          name="query"
+          id="queryInput"
+          placeholder="Enter Your Query: "
+          onkeyup="this.value = this.value.toUpperCase();"
+          autofocus
+        />
+        <button type="submit" name="submit">Create Truth Table</button>
+      </form>
 
-    <form action="/" method="post">
-      {% csrf_token %}
-      <input
-        type="text"
-        name="query"
-        id="queryInput"
-        placeholder="Enter Your Query: "
-      />
-      <button type="submit" name="submit">Create Truth Table</button>
-    </form>
-    <button type="button" class="proposition-btn">∧</button>
-    <button type="button" class="proposition-btn">∨</button>
-    <button type="button" class="proposition-btn">→</button>
-    <button type="button" class="proposition-btn">¬</button>
-    <button type="button" class="proposition-btn">⇔</button>
+      <div class="butt-wrapper">
+        <button type="button" id="proposition-btn">&#40;</button>
+        <button type="button" id="proposition-btn">∧</button>
+        <button type="button" id="proposition-btn">∨</button>
+        <button type="button" id="proposition-btn">→</button>
+        <button type="button" id="proposition-btn">¬</button>
+        <button type="button" id="proposition-btn">⇔</button>
+        <button type="button" id="proposition-btn">&#41;</button>
+      </div>
 
-    {% if query %}
-    <h2>{{ query }}</h2>
-    {% endif %} {% if truth_table_data %}
-    <table border="1" id="truthTable">
-      <thead>
-        <tr>
-          {% for header in truth_table_data.headers %}
-          <th>{{ header }}</th>
+      {% if query %}
+      <h2>{{ query }}</h2>
+      {% endif %} {% if truth_table_data %}
+      <table border="1" id="truthTable">
+        <thead>
+          <tr>
+            {% for header in truth_table_data.headers %}
+            <th>{{ header }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in truth_table_data.rows %}
+          <tr>
+            {% for value in row %}
+            <td>{{ value }}</td>
+            {% endfor %}
+          </tr>
           {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in truth_table_data.rows %}
-        <tr>
-          {% for value in row %}
-          <td>{{ value }}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% endif %}
+        </tbody>
+      </table>
+      {% endif %}
+    </main>
+    <footer class="footer">
+      Made by -
+      <span>Ghanshyam Singh |</span>
+      <span>Shreyash Naik |</span>
+      <span>Yashraj Tiwari |</span>
+      <span>Yashwardhan Jaiswal</span>
+    </footer>
+
     <script src="static/script.js"></script>
   </body>
 </html>
